@@ -92,9 +92,9 @@ class MediaPipeEyeDetector:
             if current_time - self.last_vertical_action_time > self.VERTICAL_MOVEMENT_RESET_TIME:
                 self.last_vertical_action_time = 0
             
-            # 当没有人脸时，将眼睛状态标记为开放（避免误判为闭眼）
-            # 修复：当face_detected为False时，eyes_closed应该为False
-            self.eyes_state_history.append(True)  # False 表示眼睛睁开
+            # 当没有人脸时，将眼睛状态标记为闭合
+            self.eyes_state_history.append(True)  # True 表示眼睛闭合
+            detection_result['eyes_closed'] = True
             return detection_result
         
         detection_result['face_detected'] = True
@@ -268,6 +268,3 @@ class MediaPipeEyeDetector:
             cv2.putText(frame, f"Right EAR: {detection_result['right_ear']:.2f}", (10, frame.shape[0] - 30),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
             
-        # # 显示FPS
-        # cv2.putText(frame, f"FPS: {detection_result.get('fps', 0):.1f}", (10, 30),
-        #            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
